@@ -14,6 +14,11 @@ Operating System    : Windows 7
 /*
 Problem Statement
 
+This program writes the make of the user's car to a specified file, writes
+the model of the user's car to a specified file, writes the make and model
+to a third specified file, then reads and prints the title and contents
+of all of the above files.
+
 */
 
 #include <iostream>
@@ -22,89 +27,70 @@ Problem Statement
 
 using namespace std;
 
+string getinput(string out, int file = 0);
 int createc(string f, string d);
 int createmyCar(string makef, string modelf, string carf);
 int printCar(string makef, string modelf, string carf);
 
 int main() {
 
-    //get filename for make
-    string makef;
-    cout << "Please enter filename for make (.txt will be appended): ";
-    cin >> makef;
-    makef.append(".txt");    //append '.txt'
+    //get filenames and data for make, model, and myCar
+    string makef = getinput("Please enter filename for make", 1);
+    string make = getinput("Please enter make");
+    string modelf = getinput("Please enter filename for model", 1);
+    string model = getinput("Please enter model");
+    string carf = getinput("Please enter filename for car", 1);
 
-    //get make
-    cin.ignore();   //clear cin buffer
-    string make;
-    cout << "Please enter make: ";
-    getline(cin, make);
-
-    //write make to c1.txt, quit if unsuccessful
-    if (createc(makef, make)) {
-
-        cout << "Unable to open file";
-        return 1;
-
-    }
-
-    //get filename for model
-    string modelf;
-    cout << "Please enter filename for model (.txt will be appended): ";
-    cin >> modelf;
-    modelf.append(".txt");   //append '.txt'
-
-    //get model
-    cin.ignore();   //clear cin buffer
-    string model;
-    cout << "Please enter model: ";
-    getline(cin, model);
-
-    //write model to c2.txt, quit if unsuccessful
-    if (createc(modelf, model)) {
+    //read and write files, quit if unsuccessful
+    if (createc(makef, make) | createc(modelf, model) 
+        | createmyCar(makef, modelf, carf) | printCar(makef, modelf, carf)) {
 
         cerr << "Unable to open file";
         return 1;
 
     }
 
-    //get filename for myCar
-    string carf;
-    cout << "Please enter filename for car (.txt will be appended): ";
-    cin >> carf;
-    carf.append(".txt");   //append '.txt'
-
-    //write make and model to myCar.txt, quit if unsuccessful
-    if (createmyCar(makef, modelf, carf)) {
-
-        cerr << "Unable to open file";
-        return 1;
-
-    }
-
-    //read and print contents of c1, c2, and myCar, quit if unsuccessful
-    if (printCar(makef, modelf, carf)) {
-
-        cerr << "Unable to open file";
-        return 1;
-
-    }
-
+    system("pause");
     return 0;
+
+}
+
+//gets filenames and data from user
+string getinput(string out, int file) {
+
+    //string to be acquired from user
+    string s;
+
+    //print prompt from provided argument
+    cout << out;
+    if (file)
+        cout << " (.txt will be appended)";
+    cout << ": ";
+
+    //write cin to s
+    getline(cin, s);
+
+    //append .txt if s is a filename
+    if (file)
+        s.append(".txt");
+
+    return s;
 
 }
 
 int createc(string f, string d) {
 
+    //open new file c for writing
     ofstream c(f, ios::out | ios::trunc);
 
-    if (!c.is_open()) {
-
+    //throw error if file fails to open
+    if (!c.is_open())
         return 1;
 
-    }
-
+    //write d to file
     c << d;
+
+    //close file
     c.close();
 
     return 0;
@@ -119,11 +105,9 @@ int createmyCar(string makef, string modelf, string carf) {
     ofstream myCar(carf, ios::out | ios::trunc);
 
     //throw error if any files fail to open
-    if (!c1.is_open() | !c2.is_open() | !myCar.is_open()) {
-
+    if (!c1.is_open() | !c2.is_open() | !myCar.is_open())
         return 1;
 
-    }
 
     //string "make model" read from c1 and c2
     string car = "";
@@ -160,28 +144,32 @@ int printCar(string makef, string modelf, string carf) {
     ifstream myCar(carf, ios::in);
 
     //throw error if any files fail to open
-    if (!c1.is_open() | !c2.is_open() | !myCar.is_open()) {
-
+    if (!c1.is_open() | !c2.is_open() | !myCar.is_open())
         return 1;
 
-    }
-
+    //string for reading from files
     string buffer;
 
-    cout << "\n\n";
+    
+    cout << "\n";
 
+    //write table of filenames and file contents
+    //make
     cout << makef << "\t\t\t";
     getline(c1, buffer);
     cout << buffer << "\n";
 
+    //model
     cout << modelf << "\t\t\t";
     getline(c2, buffer);
     cout << buffer << "\n";
 
+    //car
     cout << carf << "\t\t";
     getline(myCar, buffer);
-    cout << buffer << "\n";
+    cout << buffer << "\n\n";
 
+    //close files
     c1.close();
     c2.close();
     myCar.close();

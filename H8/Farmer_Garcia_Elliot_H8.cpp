@@ -35,7 +35,7 @@ int main() {
     makef.append(".txt");    //append '.txt'
 
     //get make
-    cin.ignore();
+    cin.ignore();   //clear cin buffer
     string make;
     cout << "Please enter make: ";
     getline(cin, make);
@@ -55,7 +55,7 @@ int main() {
     modelf.append(".txt");   //append '.txt'
 
     //get model
-    cin.ignore();
+    cin.ignore();   //clear cin buffer
     string model;
     cout << "Please enter model: ";
     getline(cin, model);

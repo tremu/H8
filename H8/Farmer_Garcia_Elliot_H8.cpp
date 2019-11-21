@@ -23,8 +23,8 @@ Problem Statement
 using namespace std;
 
 int createc(string f, string d);
-int createmyCar(string make, string model, string carf);
-int printCar(string make, string model, string carf);
+int createmyCar(string makef, string modelf, string carf);
+int printCar(string makef, string modelf, string carf);
 
 int main() {
 
@@ -82,7 +82,7 @@ int main() {
 
     }
 
-    //read and print contents of c1, c2, and myCar
+    //read and print contents of c1, c2, and myCar, quit if unsuccessful
     if (printCar(makef, modelf, carf)) {
 
         cerr << "Unable to open file";
@@ -113,52 +113,39 @@ int createc(string f, string d) {
 
 int createmyCar(string makef, string modelf, string carf) {
 
+    //open files for reading or writing
+    ifstream c1(makef, ios::in);
+    ifstream c2(modelf, ios::in);
+    ofstream myCar(carf, ios::out | ios::trunc);
+
+    //throw error if any files fail to open
+    if (!c1.is_open() | !c2.is_open() | !myCar.is_open()) {
+
+        return 1;
+
+    }
+
     //string "make model" read from c1 and c2
     string car = "";
 
     //string for reading from c1 and c2
     string buffer;
 
-    //open c1 for reading
-    ifstream c1(makef, ios::in);
-
-    //throw error if c1 fails to open
-    if (!c1.is_open()) {
-
-        return 1;
-
-    }
-
-    //read c1 into buffer and close
+    //read c1 into buffer, append to car
     getline(c1, buffer);
-    c1.close();
-
-    //add make to car
     car.append(buffer);
     car.append(" ");
 
-    ifstream c2(modelf, ios::in);
-
-    if (!c2.is_open()) {
-
-        return 1;
-
-    }
-
+    //read c2 into buffer, append to car
     getline(c2, buffer);
-    c2.close();
-
     car.append(buffer);
 
-    ofstream myCar(carf, ios::out | ios::trunc);
-
-    if (!myCar.is_open()) {
-
-        return 1;
-
-    }
-
+    //write car to myCar
     myCar << car;
+
+    //close files
+    c1.close();
+    c2.close();
     myCar.close();
 
     return 0;
@@ -167,53 +154,37 @@ int createmyCar(string makef, string modelf, string carf) {
 
 int printCar(string makef, string modelf, string carf) {
 
+    //open files for reading
+    ifstream c1(makef, ios::in);
+    ifstream c2(modelf, ios::in);
+    ifstream myCar(carf, ios::in);
+
+    //throw error if any files fail to open
+    if (!c1.is_open() | !c2.is_open() | !myCar.is_open()) {
+
+        return 1;
+
+    }
+
     string buffer;
 
     cout << "\n\n";
+
     cout << makef << "\t\t\t";
-
-    ifstream c1(makef, ios::in);
-
-    if (!c1.is_open()) {
-
-        return 1;
-
-    }
-
     getline(c1, buffer);
-    c1.close();
-
     cout << buffer << "\n";
 
     cout << modelf << "\t\t\t";
-
-    ifstream c2(modelf, ios::in);
-
-    if (!c2.is_open()) {
-
-        return 1;
-
-    }
-
     getline(c2, buffer);
-    c2.close();
-
     cout << buffer << "\n";
 
     cout << carf << "\t\t";
-
-    ifstream myCar(carf, ios::in);
-
-    if (!myCar.is_open()) {
-
-        return 1;
-
-    }
-
     getline(myCar, buffer);
-    myCar.close();
-
     cout << buffer << "\n";
+
+    c1.close();
+    c2.close();
+    myCar.close();
 
     return 0;
 }

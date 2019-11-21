@@ -12,6 +12,7 @@ Operating System    : Windows 7
 */
 
 /*
+
 Problem Statement
 
 This program writes the make of the user's car to a specified file, writes
@@ -50,7 +51,7 @@ int main() {
 
     }
 
-    system("pause");
+    //system("pause");
     return 0;
 
 }
@@ -108,24 +109,17 @@ int createmyCar(string makef, string modelf, string carf) {
     if (!c1.is_open() | !c2.is_open() | !myCar.is_open())
         return 1;
 
-
-    //string "make model" read from c1 and c2
-    string car = "";
-
     //string for reading from c1 and c2
     string buffer;
 
     //read c1 into buffer, append to car
     getline(c1, buffer);
-    car.append(buffer);
-    car.append(" ");
+	myCar << buffer;
+    myCar << " ";
 
     //read c2 into buffer, append to car
     getline(c2, buffer);
-    car.append(buffer);
-
-    //write car to myCar
-    myCar << car;
+	myCar << buffer;
 
     //close files
     c1.close();

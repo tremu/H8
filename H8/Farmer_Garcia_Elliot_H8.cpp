@@ -150,7 +150,6 @@ int printCar(string makef, string modelf, string carf) {
     //string for reading from files
     string buffer;
 
-    
     cout << "\n";
 
     //write table of filenames and file contents
